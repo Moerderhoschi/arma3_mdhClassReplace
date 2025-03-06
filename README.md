@@ -1,9 +1,7 @@
-***********************************************************
-* mdhClassReplace
-* replace classnames in sqm,sqf files
-* made by moerderhoschi
-* 2016.09.17
-***********************************************************
+mdhClassReplace
+replace classnames in sqm,sqf files
+made by moerderhoschi
+2016.09.17
 
 a simple javaprogram to replace classes in all sqm, sqf, sqs, ext files in the folder and subfolders of the toollocation. Set classnames in the mdhClassReplace.cfg file
 
