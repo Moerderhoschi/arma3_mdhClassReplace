@@ -15,17 +15,17 @@ how does it work:
 
 how to use it, example to port A2 mission to A3 with CUP:
 
-download the mdhClassReplace.7z
+1. download the mdhClassReplace.7z
 
-extract it to an empty folder
+2. extract it to an empty folder
 
-put your arma 2 missions into the same folder
+3. put your arma 2 missions into the same folder
 
-doubleklick the mdhClassReplace.jar file
+4. doubleklick the mdhClassReplace.jar file
 
-check the mdhClassReplaceLog.txt file to see what the tool has done
+5. check the mdhClassReplaceLog.txt file to see what the tool has done
 
-copy your arma 2 mission into your arma 3 missions folder and open it in the 3D editor (hopefully it works :D)
+6. copy your arma 2 mission into your arma 3 missions folder and open it in the 3D editor (hopefully it works :D)
 
 attention, use this tool/mdhClassReplace.jar on your own risk
 
