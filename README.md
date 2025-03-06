@@ -11,3 +11,7 @@ how does it work:
 3. check every sqm, sqf, sqs, ext file in the folder and subfolders of the toollocation for the old classnames and replace them with the new one
 
 attention, use this tool/mdhClassReplace.jar on your own risk
+
+ ![Alt text](http://moerderhoschi.bplaced.net/public/tools/arma3/mdhClassReplace.cfg.png)
+
+ ![Alt text](http://moerderhoschi.bplaced.net/public/tools/arma3/mdhClassReplaceLog.txt.png)
