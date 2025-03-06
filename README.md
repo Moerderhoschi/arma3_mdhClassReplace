@@ -12,11 +12,6 @@ how does it work:
 2. read the mdhClassReplace.cfg to get the old and new classnames for the replacement
 3. check every sqm, sqf, sqs, ext file in the folder and subfolders of the toollocation for the old classnames and replace them with the new one
 
-create a﻿﻿nd write log messages into the mdhClassReplaceLog.txt
-
-read the mdhClassReplace.cfg to get the old and new classnames for the replacement
-
-check every ext, sqs, sqm, sqf file in the fold﻿er a﻿nd subfolders of the toollocation for the old classnames and replace them with the new one
 
 how to use it, example to port A2 mission to A3 with CUP:
 
