@@ -1,0 +1,151 @@
+package mdhClassReplace;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+public class mdhClassReplace {
+
+	public static void dirTree(File dir, List classOld, List classNew) {
+		File[] subdirs = dir.listFiles();
+		for (File subdir : subdirs) {
+			if (subdir.isDirectory()) {
+				dirTree(subdir, classOld, classNew);
+			} else {
+				doFile(subdir, classOld, classNew);
+			}
+		}
+	}
+
+	public static void doFile(File file, List classOld, List classNew) {
+		String extension = "";
+		int i = file.getName().lastIndexOf('.');
+		if (i > 0) {
+			extension = file.getName().substring(i + 1).toLowerCase();
+		}
+
+		if (extension.contentEquals("sqm")
+				|| extension.contentEquals("sqf")
+				|| extension.contentEquals("sqs")
+				|| extension.contentEquals("ext")) {
+			writeLog("checkFile: " + file.getAbsolutePath());
+			rplTxt(file.getAbsolutePath(), classOld, classNew);
+		}
+	}
+
+	public static void rplTxt(String fileName, List classOld, List classNew) {
+
+		Path path = Paths.get(fileName);
+		Charset charset = StandardCharsets.UTF_8;
+
+		String content = null;
+
+		try {
+			content = new String(Files.readAllBytes(path), charset);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String contentLower = content.toLowerCase();
+
+		boolean foundClass = false;
+		for (int i = 0; i < classOld.size(); i++) {
+			String classOldS = "\"" + classOld.get(i).toString() + "\"";
+			String classNewS = "\"" + classNew.get(i).toString() + "\"";
+			if (contentLower.contains(classOldS.toLowerCase())) {
+				foundClass = true;
+				content = content.replaceAll("(?i)"+classOldS, classNewS);
+				writeLog("changedClass: " + classOldS + " to " + classNewS);								
+			}
+			
+			classOldS = "'" + classOld.get(i).toString() + "'";
+			classNewS = "'" + classNew.get(i).toString() + "'";
+			if (contentLower.contains(classOldS.toLowerCase())) {
+				foundClass = true;
+				content = content.replaceAll("(?i)"+classOldS, classNewS);
+				writeLog("changedClass: " + classOldS + " to " + classNewS);
+			}
+		}
+
+		if (foundClass) {
+			try {
+				Files.write(path, content.getBytes(charset));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void writeLog(String logTxt) {
+		PrintWriter out;
+		logTxt = new java.util.Date() + " --> " + logTxt;
+		try {
+			out = new PrintWriter(new BufferedWriter(new FileWriter(
+					"mdhClassReplaceLog.txt", true)));
+			out.println(logTxt);
+			System.out.println(logTxt);
+			out.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	}
+
+	public static void main(String[] args) {
+
+		writeLog("-------------------------------");
+		writeLog("pgmStart");
+		String currentDir = System.getProperty("user.dir");
+		writeLog("currentDir: " + currentDir);
+
+		File f = new File(currentDir);
+		File c = new File(currentDir.concat("\\mdhClassReplace.cfg"));
+
+		if (c.exists() && !c.isDirectory()) {
+
+			String classOldS = "";
+			String classNewS = "";
+			List classOld = new ArrayList();
+			List classNew = new ArrayList();
+
+			try {
+				BufferedReader in = new BufferedReader(new FileReader(c));
+				String actLine = null;
+				while ((actLine = in.readLine()) != null) {
+
+					int seperatorPos = actLine.indexOf(";");
+					classOldS = actLine.substring(0, seperatorPos);
+					classNewS = actLine.substring(seperatorPos + 1);
+
+					if (!classOldS.isEmpty() && !classNewS.isEmpty()) {
+						classOld.add(classOldS);
+						classNew.add(classNewS);
+					}
+
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				writeLog("pgmError: error while reading mdhClassReplace.cfg");
+				System.exit(-1);
+			}
+
+			dirTree(f, classOld, classNew);
+		} else {
+			writeLog("mdhClassReplace.cfg not found");
+		};
+		
+		writeLog("pgmEnd");
+	}
+}
